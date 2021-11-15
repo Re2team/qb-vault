@@ -1,7 +1,6 @@
 # Qb-Vaults
 Storage Inventory Creator and Viewer
 
-Same As **Nopixel** Vault
 
 # ScreenShots
 > Eye Target
