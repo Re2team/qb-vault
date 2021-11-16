@@ -11,15 +11,13 @@ end)
 RegisterServerEvent('qb-vault:server:createStorage')
 AddEventHandler('qb-vault:server:createStorage', function(password,citizenid,storagename)
     local src = source
-    print('yaboo')
     local storage = exports.oxmysql:insert('INSERT INTO vaults (`citizenid`, `password`, `storagename`) VALUES (?, ?, ?)',{citizenid,password,storagename})
 end)
 
 RegisterServerEvent('qb-vault:server:checkStorageExist')
 AddEventHandler('qb-vault:server:checkStorageExist', function(citizenid,storagename,location)
     local src = source
-    print('exist')
-    print(storagename)
+
     local storage = exports.oxmysql:fetchSync('SELECT storagename FROM vaults WHERE citizenid = ? And storagename = ?',{citizenid,storagename})
     TriggerClientEvent('qb-vault:storagechecker', src, storage,location)
 end)

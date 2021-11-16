@@ -33,7 +33,6 @@ end)
 RegisterNetEvent('qb-vault:openInventory')
 AddEventHandler('qb-vault:openInventory', function(data)
     local storage=data
-    print(json.encode(storage))
     if storage[1] ~= nil then
         Wait(100)
         TriggerServerEvent("inventory:server:OpenInventory", "stash", storage[1].storagename,{
@@ -61,7 +60,7 @@ AddEventHandler('qb-vault:storagechecker', function(data,location)
     if storage[1] == nil then
         if player.money['cash'] >= tonumber(Config.StorageCreationAmount) then
             TriggerServerEvent('qb-vault:server:removeMoney')
-            local dialog = exports['qb-input']:ShowInput({
+            local cpdialog = exports['qb-input']:ShowInput({
                 header = "Create Password",
                 submitText = "Submit",
                 inputs = {
@@ -73,9 +72,7 @@ AddEventHandler('qb-vault:storagechecker', function(data,location)
                     }
                 },
             })
-            print(json.encode(dialog))
-            if dialog ~= nil then
-                print('not empty')
+            if cpdialog ~= nil then
                 TriggerServerEvent('qb-vault:server:createStorage', dialog.password,citizenid,storagename)
                 QBCore.Functions.Notify("Vault has been Created", "success")
             end
