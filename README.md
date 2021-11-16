@@ -59,3 +59,8 @@ And Add location target to Like sample :
         distance = 2
 },
     ```
+##WIP
+
+- Make Vault Hackable
+- Make Key For Your Friend
+- Add Shop to buy Storage Capacity
