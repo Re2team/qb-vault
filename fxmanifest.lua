@@ -8,7 +8,11 @@ author 'QBCore Framework'
 shared_scripts {
     'config/sh_config.lua'
 }
+lua54 'yes'
 
+escrow_ignore {
+    'config/sh_config.lua',  -- Only ignore one file
+  }
 client_scripts {
 	'client/*.lua'
 }

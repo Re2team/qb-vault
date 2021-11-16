@@ -26,7 +26,7 @@ Config.location = {
     [2] = {name="North_Calafia_Way" , coords= vector3(1300.53, 4319.27, 38.17)}
 }
 ```
-And Add location target to Like sample :
+And Add location target to boxZone Like sample :
 
 ```
 ["qb-vault1"] = {
