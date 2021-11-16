@@ -7,7 +7,7 @@ AddEventHandler('qb-vault:server:checkThePassword', function(password,citizenid,
     print(password)
     print(citizenid)
     local storage = exports.oxmysql:fetchSync('SELECT storagename FROM vaults WHERE citizenid = ? And storagename = ? And password = ?',{citizenid,storagename,password})
-    TriggerClientEvent('qb-vault:openInventory', -1, storage)
+    TriggerClientEvent('qb-vault:openInventory', src, storage)
 end)
 
 
@@ -22,7 +22,7 @@ AddEventHandler('qb-vault:server:checkStorageExist', function(citizenid,storagen
     local src = source
     print(storagename)
     local storage = exports.oxmysql:fetchSync('SELECT storagename FROM vaults WHERE citizenid = ? And storagename = ?',{citizenid,storagename})
-    TriggerClientEvent('qb-vault:storagechecker', -1, storage,location)
+    TriggerClientEvent('qb-vault:storagechecker', src, storage,location)
 end)
 
 RegisterServerEvent('qb-vault:server:removeMoney')
