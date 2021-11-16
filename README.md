@@ -15,7 +15,7 @@ Storage Inventory Creator and Viewer
 ## Dependencies
 - [QB Core](https://github.com/qbcore-framework/qb-core)
 - [Qb-target](https://github.com/BerkieBb/qb-target)
-- [qbcore-framework - Qb-input](https://github.com/qbcore-framework/qb-input)
+- [RE2-Team-Qb-input](https://github.com/Re2team/qb-input)
 
 
 ## Config
@@ -26,7 +26,7 @@ Config.location = {
     [2] = {name="North_Calafia_Way" , coords= vector3(1300.53, 4319.27, 38.17)}
 }
 ```
-And Add location target to Like sample :
+And Add location target to boxZone Like sample :
 
 ```
 ["qb-vault1"] = {
