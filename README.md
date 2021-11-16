@@ -15,7 +15,7 @@ Storage Inventory Creator and Viewer
 ## Dependencies
 - [QB Core](https://github.com/qbcore-framework/qb-core)
 - [Qb-target](https://github.com/BerkieBb/qb-target)
-- [Re2 Team - Qb-input](https://github.com/Re2team/qb-input/) or [qbcore-framework - Qb-input](https://github.com/qbcore-framework/qb-input)
+- [qbcore-framework - Qb-input](https://github.com/qbcore-framework/qb-input)
 
 
 ## Config
@@ -57,5 +57,5 @@ And Add location target to Like sample :
 			  },
         },
         distance = 2
-    },
+},
     ```
