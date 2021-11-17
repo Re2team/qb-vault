@@ -73,7 +73,7 @@ AddEventHandler('qb-vault:storagechecker', function(data,location)
                 },
             })
             if cpdialog ~= nil then
-                TriggerServerEvent('qb-vault:server:createStorage', dialog.password,citizenid,storagename)
+                TriggerServerEvent('qb-vault:server:createStorage', cpdialog.password,citizenid,storagename)
                 QBCore.Functions.Notify("Vault has been Created", "success")
             end
         else
