@@ -26,39 +26,8 @@ Config.location = {
     [2] = {name="North_Calafia_Way" , coords= vector3(1300.53, 4319.27, 38.17)}
 }
 ```
-And Add location target to boxZone Like sample :
 
-```
-["qb-vault1"] = {
-        name = "Adams-Apple-Storage",
-        coords = vector3(-44.43, -1235.34, 29.39),
-        length = 1,
-        width = 3,
-        heading = 270.41,
-        debugPoly = false,
-        minZ = 27.36,
-        maxZ = 30.87834,
-        options = {
-            {
-              type = "client",
-			  action = function(entity) 
-				TriggerEvent('qb-vault:openStorage', 'Adams_Apple_Vaults')
-			  end,
-              icon = "fas fa-box-open",
-              label = "Open Storage",
-            },
-			{
-				type = "client",
-				action = function(entity) 
-				  TriggerEvent('qb-vault:createStorage', 'Adams_Apple_Vaults')
-				end,
-				icon = "fas fa-boxes",
-				label = "Buy A Storage",
-			  },
-        },
-        distance = 2
-},
-```
+### You Dont need to add the target to qbtarget config . you need to remove them for this update.
 
 ## WIP
 

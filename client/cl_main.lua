@@ -1,4 +1,38 @@
-local QBCore = exports['qb-core']:GetCoreObject() -- We've ALWAYS got to grab our core object
+local QBCore = exports['qb-core']:GetCoreObject()
+
+
+CreateThread(function()
+    for k, v in pairs(Config.location) do
+        exports['qb-target']:AddBoxZone(v.name, v.coords, 1, 3, {
+            name = v.name,
+            heading = v.heading,
+            debugPoly = false,
+            minZ = v.minz,
+            maxZ = v.maxz,
+        }, {
+            options = {
+                {
+                  type = "client",
+                  action = function(entity) 
+                    TriggerEvent('qb-vault:openStorage', v.name)
+                  end,
+                  icon = "fas fa-box-open",
+                  label = "Open Storage",
+                },
+                {
+                    type = "client",
+                    action = function(entity) 
+                      TriggerEvent('qb-vault:createStorage', v.name)
+                    end,
+                    icon = "fas fa-boxes",
+                    label = "Buy A Storage",
+                  },
+            },
+            distance = 2.5
+        })
+    end
+    
+  end)
 
 AddEventHandler('qb-vault:openStorage', function(location)
     local player=QBCore.Functions.GetPlayerData()
