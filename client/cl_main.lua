@@ -189,7 +189,7 @@ AddEventHandler('re2-vault:openStorageMenu', function(data)
               exports['qb-menu']:openMenu(storageMenu)
             QBCore.Functions.Notify("Correct Password", "success")
         else
-            QBCore.Functions.Notify("Wrong Pa", "error")
+            QBCore.Functions.Notify("Wrong Password", "error")
         end
     end
 end)

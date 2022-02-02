@@ -15,7 +15,7 @@ Storage Inventory Creator and Viewer
 ## Dependencies
 - [QB Core](https://github.com/qbcore-framework/qb-core)
 - [Qb-target](https://github.com/BerkieBb/qb-target)
-- [RE2-Team-Qb-input](https://github.com/Re2team/qb-input)
+- [Qb-input](https://github.com/Re2team/qb-input)
 
 
 ## Config
@@ -26,6 +26,12 @@ Config.location = {
 }
 ```
 
+## How to Install
+```
+import vaults.sql
+ensure qb-vault
+change sh_config.lua to your Own Prefer
+```
 ### You Dont need to add the target to qbtarget config . you need to remove them for this update.
 
 ## WIP
