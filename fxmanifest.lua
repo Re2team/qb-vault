@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'qb-vault'
+description 're2-vault'
 version '1.0.0'
 author 'QBCore Framework'
 shared_scripts {
@@ -15,3 +15,5 @@ server_scripts  {
     '@oxmysql/lib/MySQL.lua',
     'server/*.lua'
 }
+
+lua54 'yes'
