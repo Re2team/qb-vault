@@ -32,6 +32,4 @@ Config.location = {
 
 ```
 - Make Vault Hackable
-- Make Key For Your Friend
-- Add Shop to buy Storage Capacity
 ```
