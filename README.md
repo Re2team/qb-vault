@@ -35,7 +35,7 @@ Storage Inventory Creator and Viewer
 You need to Add lotions in config/sh_config like sample :
 ```
 Config.location = {
-    [1] = {name="Adams_Apple_Vaults" , coords= vector3(-43.81, -1236.47, 29.34),heading=270.41,minz=27.36 , maxz=30.87834},
+    [1] = {name="Adams_Apple" , coords= vector3(-43.81, -1236.47, 29.34),heading=270.41,minz=27.36 , maxz=30.87834,length=1,width=3,distance=2.5,debug=false},
 }
 ```
 
