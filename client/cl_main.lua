@@ -3,10 +3,10 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 CreateThread(function()
     for k, v in pairs(Config.location) do
-        exports['qb-target']:AddBoxZone(v.name, v.coords, 1, 3, {
+        exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
             name = v.name,
             heading = v.heading,
-            debugPoly = false,
+            debugPoly = v.debug,
             minZ = v.minz,
             maxZ = v.maxz,
         }, {
@@ -28,7 +28,7 @@ CreateThread(function()
                     label = "Buy A Storage",
                   },
             },
-            distance = 2.5
+            distance = v.distance
         })
     end
     

@@ -17,7 +17,7 @@ QBCore.Functions.CreateCallback('re2-vault:server:fetchStorage', function(source
 	local src = source
     local cid = string.lower('%'..data.cid..'%')
 
-    local storages= MySQL.Sync.fetchAll('SELECT id,citizenid,storagename,storage_location,storage_size FROM vaults WHERE (LOWER(citizenid) like ? OR LOWER(holders) = ? ) AND storage_location = ? ',{cid,cid,data.storagelocation})
+    local storages= MySQL.Sync.fetchAll('SELECT id,citizenid,storagename,storage_location,storage_size FROM vaults WHERE (LOWER(citizenid) like ? OR LOWER(holders) like ? ) AND storage_location = ? ',{cid,cid,data.storagelocation})
     if next(storages) then
         return cb(storages)
     else
