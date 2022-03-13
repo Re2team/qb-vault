@@ -61,6 +61,23 @@ QBCore.Functions.CreateCallback('re2-vault:server:addMember', function(source,cb
     end
     
 end)
+QBCore.Functions.CreateCallback('re2-vault:server:changePassword', function(source,cb,data)
+	local src = source
+    local storage= MySQL.Sync.fetchAll('SELECT id,citizenid,storagename,storage_location,storage_size,holders FROM vaults WHERE id = ? ',{data.id})
+    if next(storage) then
+        MySQL.Async.execute("UPDATE vaults SET `password`=:password WHERE `id`=:id LIMIT 1", {
+            password = data.password,
+            id = data.id
+        }, function(r)
+            if r then
+                return cb(r)
+            end
+        end)
+    else
+        return cb(false)
+    end
+    
+end)
 
 QBCore.Functions.CreateCallback('re2-vault:server:removeMember', function(source,cb,data)
 	local src = source

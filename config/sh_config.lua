@@ -8,6 +8,8 @@ Config.StorageAddPrice=3000
 Config.StorageSlots=100
 Config.StorageCreationAmount=5000
 
+Config.passwordSettingCost=500
+
 Config.SaleAvailableForJob=true
 Config.jobName="warehouseman"
 

@@ -2,8 +2,6 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData()
 
 CreateThread(function()
-    -- local Player = QBCore.Functions.GetPlayerData()
-    print(PlayerData.job.name == Config.jobName)
     if PlayerData.job.name == Config.jobName then
         for k, v in pairs(Config.location) do
             exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
@@ -29,7 +27,15 @@ CreateThread(function()
                         end,
                         icon = "fas fa-boxes",
                         label = "Create A Storage For",
-                      },
+                    },
+                    {
+                        type = "client",
+                        action = function(entity) 
+                          TriggerEvent('re2-vault:changeStoragePasswordFor', k)
+                        end,
+                        icon = "fas fa-boxes",
+                        label = "Change Storage Password",
+                    },
                 },
                 distance = v.distance
             })
@@ -206,6 +212,17 @@ AddEventHandler('re2-vault:openStorageMenu', function(data)
                     txt = 'Add 200lbs to the '..v.storagename..' Storage',
                     params = {
                         event = 're2-vault:addCapacity',
+                        args = {
+                            storageid = v.id
+                        }
+                    }
+                }
+                table.insert(storageMenu,addstorageMenu) 
+                local addstorageMenu={
+                    header = '🔑 | Change Password',
+                    txt = 'Change Storage Password',
+                    params = {
+                        event = 're2-vault:changePassword',
                         args = {
                             storageid = v.id
                         }
@@ -451,34 +468,76 @@ end)
 AddEventHandler('re2-vault:addCapacity', function(data)
     local player=QBCore.Functions.GetPlayerData()
     if player.money['cash'] >= tonumber(Config.StorageAddPrice) then
-    local p = nil
-    local data ={
-        id = data.storageid
-    }
-    local addCapacityPromise = function(data)
-        if p then return end
-        p = promise.new()
-        QBCore.Functions.TriggerCallback('re2-vault:server:addCapacity', function(result)
-            print(json.encode(result))
-            p:resolve(result)
-        end, data)
-        return Citizen.Await(p)
-    end
-    
-    local result = addCapacityPromise(data)
-    p = nil
-    if result then
-        TriggerServerEvent('re2-vault:server:removeMoney',Config.StorageAddPrice)
-        QBCore.Functions.Notify("You Add Capacity to Your Storage", "success")
+        local p = nil
+        local data ={
+            id = data.storageid
+        }
+        local addCapacityPromise = function(data)
+            if p then return end
+            p = promise.new()
+            QBCore.Functions.TriggerCallback('re2-vault:server:addCapacity', function(result)
+                print(json.encode(result))
+                p:resolve(result)
+            end, data)
+            return Citizen.Await(p)
+        end
+        
+        local result = addCapacityPromise(data)
+        p = nil
+        if result then
+            TriggerServerEvent('re2-vault:server:removeMoney',Config.StorageAddPrice)
+            QBCore.Functions.Notify("You Add Capacity to Your Storage", "success")
+        else
+            QBCore.Functions.Notify("Something Went Wrong", "error")
+        end
     else
-        QBCore.Functions.Notify("Something Went Wrong", "error")
+        QBCore.Functions.Notify("You Can not Afort that", "error")
     end
-else
-    QBCore.Functions.Notify("You Can not Afort that", "error")
-end
-
-
 end)
+
+AddEventHandler('re2-vault:changePassword', function(data)
+    local player=QBCore.Functions.GetPlayerData()
+    local citizenid=player.citizenid
+    -- local storagename=location.."_"..citizenid
+    local mdialog = exports['qb-input']:ShowInput({
+        header = "NewPassword",
+        submitText = "Submit",
+        inputs = {
+            {
+                text = "New Password", -- text you want to be displayed as a place holder
+                name = "password", -- name of the input should be unique otherwise it might override
+                type = "password", -- type of the input
+                isRequired = true -- Optional [accepted values: true | false] but will not submit the form if no value is inputted
+            }
+        },
+    })
+
+    if mdialog ~= nil then
+        local p = nil
+        local data ={
+            password = mdialog.password,
+            id = data.storageid
+        }
+        local addMemberPromise = function(data)
+            if p then return end
+            p = promise.new()
+            QBCore.Functions.TriggerCallback('re2-vault:server:changePassword', function(result)
+                print(json.encode(result))
+                p:resolve(result)
+            end, data)
+            return Citizen.Await(p)
+        end
+    
+        local result = addMemberPromise(data)
+        p = nil
+        if result then
+            QBCore.Functions.Notify("Member Add Sucessfuly", "success")
+        else
+            QBCore.Functions.Notify("Something Went Wrong", "error")
+        end
+    end
+end)
+
 
 
 
