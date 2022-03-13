@@ -1,36 +1,71 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-
+local PlayerData = QBCore.Functions.GetPlayerData()
 
 CreateThread(function()
-    for k, v in pairs(Config.location) do
-        exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
-            name = v.name,
-            heading = v.heading,
-            debugPoly = v.debug,
-            minZ = v.minz,
-            maxZ = v.maxz,
-        }, {
-            options = {
-                {
-                  type = "client",
-                  action = function(entity) 
-                    TriggerEvent('re2-vault:viewStorages', k)
-                  end,
-                  icon = "fas fa-box-open",
-                  label = "View Storage",
+    -- local Player = QBCore.Functions.GetPlayerData()
+    print(PlayerData.job.name == Config.jobName)
+    if PlayerData.job.name == Config.jobName then
+        for k, v in pairs(Config.location) do
+            exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
+                name = v.name,
+                heading = v.heading,
+                debugPoly = v.debug,
+                minZ = v.minz,
+                maxZ = v.maxz,
+            }, {
+                options = {
+                    {
+                      type = "client",
+                      action = function(entity) 
+                        TriggerEvent('re2-vault:viewStorages', k)
+                      end,
+                      icon = "fas fa-box-open",
+                      label = "View Storage",
+                    },
+                    {
+                        type = "client",
+                        action = function(entity) 
+                          TriggerEvent('re2-vault:createStorageFor', k)
+                        end,
+                        icon = "fas fa-boxes",
+                        label = "Create A Storage For",
+                      },
                 },
-                {
-                    type = "client",
-                    action = function(entity) 
-                      TriggerEvent('re2-vault:createStorage', k)
-                    end,
-                    icon = "fas fa-boxes",
-                    label = "Buy A Storage",
-                  },
-            },
-            distance = v.distance
-        })
+                distance = v.distance
+            })
+        end
+    else
+        for k, v in pairs(Config.location) do
+            exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
+                name = v.name,
+                heading = v.heading,
+                debugPoly = v.debug,
+                minZ = v.minz,
+                maxZ = v.maxz,
+            }, {
+                options = {
+                    {
+                      type = "client",
+                      action = function(entity) 
+                        TriggerEvent('re2-vault:viewStorages', k)
+                      end,
+                      icon = "fas fa-box-open",
+                      label = "View Storage",
+                    },
+                    {
+                        type = "client",
+                        action = function(entity) 
+                          TriggerEvent('re2-vault:createStorage', k)
+                        end,
+                        icon = "fas fa-boxes",
+                        label = "Buy A Storage",
+                      },
+                },
+                distance = v.distance
+            })
+        end
     end
+    
     
   end)
 
@@ -220,6 +255,69 @@ AddEventHandler('re2-vault:createStorage', function(location)
         local p = nil
         local data ={
             cid = citizenid,
+            password = cpdialog.password,
+            storagename = cpdialog.name,
+            storagelocation = Config.location[location].name,
+            storagesize = Config.StorageDefaultWeight
+        }
+        local createStoragePromise = function(data)
+            if p then return end
+            p = promise.new()
+            QBCore.Functions.TriggerCallback('re2-vault:server:createStorage', function(result)
+                p:resolve(result)
+            end, data)
+            return Citizen.Await(p)
+        end
+    
+        local result = createStoragePromise(data)
+        p = nil
+        if result then
+            TriggerServerEvent('re2-vault:server:removeMoney',Config.StorageCreationAmount)
+            QBCore.Functions.Notify("Storage Created", "success")
+        else
+            QBCore.Functions.Notify("Dublicate Name For storage", "error")
+        end
+        -- return cb(result)
+    else
+        QBCore.Functions.Notify("You can not Afort that", "error")
+    end
+    end
+
+
+end)
+
+AddEventHandler('re2-vault:createStorageFor', function(location)
+    local player=QBCore.Functions.GetPlayerData()
+    -- local citizenid=player.citizenid
+    local cpdialog = exports['qb-input']:ShowInput({
+        header = "Create Storage For",
+        submitText = "Submit",
+        inputs = {
+            {
+                text = "Name", -- text you want to be displayed as a place holder
+                name = "name", -- name of the input should be unique otherwise it might override
+                type = "text", -- type of the input
+                isRequired = true -- Optional [accepted values: true | false] but will not submit the form if no value is inputted
+            },
+            {
+                text = "CitizenID", -- text you want to be displayed as a place holder
+                name = "citizenid", -- name of the input should be unique otherwise it might override
+                type = "text", -- type of the input
+                isRequired = true -- Optional [accepted values: true | false] but will not submit the form if no value is inputted
+            },
+            {
+                text = "Password", -- text you want to be displayed as a place holder
+                name = "password", -- name of the input should be unique otherwise it might override
+                type = "password", -- type of the input
+                isRequired = true -- Optional [accepted values: true | false] but will not submit the form if no value is inputted
+            }
+        },
+    })
+    if cpdialog ~= nil then
+        if player.money['cash'] >= tonumber(Config.StorageCreationAmount) then
+        local p = nil
+        local data ={
+            cid = cpdialog.citizenid,
             password = cpdialog.password,
             storagename = cpdialog.name,
             storagelocation = Config.location[location].name,
