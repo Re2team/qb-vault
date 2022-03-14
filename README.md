@@ -44,7 +44,7 @@ if You Want to PLayer Who have job Only Create Storage For Players
 in sh_config.lua change 
 ```
 Config.SaleAvailableForJob=true
-Config.jobName="warehouseman"   <!-- job you make it in shared file -->
+Config.jobName="warehouseman"   --job you make it in shared file
 ```
 
 
