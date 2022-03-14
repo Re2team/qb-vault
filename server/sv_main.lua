@@ -16,7 +16,7 @@ end)
 QBCore.Functions.CreateCallback('re2-vault:server:fetchStorage', function(source,cb,data)
 	local src = source
     local cid = string.lower('%'..data.cid..'%')
-
+    print()
     local storages= MySQL.Sync.fetchAll('SELECT id,citizenid,storagename,storage_location,storage_size FROM vaults WHERE (LOWER(citizenid) like ? OR LOWER(holders) like ? ) AND storage_location = ? ',{cid,cid,data.storagelocation})
     if next(storages) then
         return cb(storages)
@@ -78,6 +78,7 @@ QBCore.Functions.CreateCallback('re2-vault:server:changePassword', function(sour
     end
     
 end)
+
 
 QBCore.Functions.CreateCallback('re2-vault:server:removeMember', function(source,cb,data)
 	local src = source

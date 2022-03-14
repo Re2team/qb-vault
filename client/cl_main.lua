@@ -2,43 +2,68 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData()
 
 CreateThread(function()
-    if PlayerData.job.name == Config.jobName then
-        for k, v in pairs(Config.location) do
-            exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
-                name = v.name,
-                heading = v.heading,
-                debugPoly = v.debug,
-                minZ = v.minz,
-                maxZ = v.maxz,
-            }, {
-                options = {
-                    {
-                      type = "client",
-                      action = function(entity) 
-                        TriggerEvent('re2-vault:viewStorages', k)
-                      end,
-                      icon = "fas fa-box-open",
-                      label = "View Storage",
+    if Config.SaleAvailableForJob then
+        if PlayerData.job.name == Config.jobName then
+            for k, v in pairs(Config.location) do
+                exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
+                    name = v.name,
+                    heading = v.heading,
+                    debugPoly = v.debug,
+                    minZ = v.minz,
+                    maxZ = v.maxz,
+                }, {
+                    options = {
+                        {
+                          type = "client",
+                          action = function(entity) 
+                            TriggerEvent('re2-vault:viewStorages', k)
+                          end,
+                          icon = "fas fa-box-open",
+                          label = "View Storage",
+                        },
+                        {
+                            type = "client",
+                            action = function(entity) 
+                              TriggerEvent('re2-vault:createStorageFor', k)
+                            end,
+                            icon = "fas fa-boxes",
+                            label = "Create A Storage For",
+                        },
+                        {
+                            type = "client",
+                            action = function(entity) 
+                              TriggerEvent('re2-vault:getcitizenId', k)
+                            end,
+                            icon = "fas fa-key",
+                            label = "Change Storage Password For",
+                        },
                     },
-                    {
-                        type = "client",
-                        action = function(entity) 
-                          TriggerEvent('re2-vault:createStorageFor', k)
-                        end,
-                        icon = "fas fa-boxes",
-                        label = "Create A Storage For",
+                    distance = v.distance
+                })
+            end
+        else
+            for k, v in pairs(Config.location) do
+                exports['qb-target']:AddBoxZone(v.name, v.coords, v.length, v.width, {
+                    name = v.name,
+                    heading = v.heading,
+                    debugPoly = v.debug,
+                    minZ = v.minz,
+                    maxZ = v.maxz,
+                }, {
+                    options = {
+                        {
+                          type = "client",
+                          action = function(entity) 
+                            TriggerEvent('re2-vault:viewStorages', k)
+                          end,
+                          icon = "fas fa-box-open",
+                          label = "View Storage",
+                        },
+                        
                     },
-                    {
-                        type = "client",
-                        action = function(entity) 
-                          TriggerEvent('re2-vault:changeStoragePasswordFor', k)
-                        end,
-                        icon = "fas fa-boxes",
-                        label = "Change Storage Password",
-                    },
-                },
-                distance = v.distance
-            })
+                    distance = v.distance
+                })
+            end
         end
     else
         for k, v in pairs(Config.location) do
@@ -531,11 +556,82 @@ AddEventHandler('re2-vault:changePassword', function(data)
         local result = addMemberPromise(data)
         p = nil
         if result then
-            QBCore.Functions.Notify("Member Add Sucessfuly", "success")
+            QBCore.Functions.Notify("PassWord Change Sucessfuly", "success")
         else
             QBCore.Functions.Notify("Something Went Wrong", "error")
         end
     end
+end)
+
+AddEventHandler('re2-vault:getcitizenId', function(location)
+    local player=QBCore.Functions.GetPlayerData()
+    
+    local mdialog = exports['qb-input']:ShowInput({
+        header = "Player Citizen ID",
+        submitText = "Submit",
+        inputs = {
+            {
+                text = "CitizenID", -- text you want to be displayed as a place holder
+                name = "citizenid", -- name of the input should be unique otherwise it might override
+                type = "text", -- type of the input
+                isRequired = true -- Optional [accepted values: true | false] but will not submit the form if no value is inputted
+            }
+        },
+    })
+
+    if mdialog ~= nil then
+        local p = nil
+        local data ={
+            cid = mdialog.citizenid,
+            storagelocation = Config.location[location].name,
+        }
+        local fetchStoragePromise = function(data)
+            if p then return end
+            p = promise.new()
+            QBCore.Functions.TriggerCallback('re2-vault:server:fetchStorage', function(result)
+                p:resolve(result)
+            end, data)
+            return Citizen.Await(p)
+        end
+        
+        local result = fetchStoragePromise(data)
+        p = nil
+            print(json.encode(result))
+            if result then
+                local storagesMenu = {
+                    {
+                        header = mdialog.citizenid.." Storages in "..Config.location[location].name,
+                        isMenuHeader = true
+                    }
+                }
+        
+                for k, v in pairs(result) do
+                    storagesMenu[#storagesMenu+1] = {
+                        header = v.storagename,
+                        txt = "Owner : "..v.citizenid,
+                        params = {
+                            event = "re2-vault:changePassword",
+                            args = {
+                                storageid = v.id
+                            }
+                        }
+        
+                    }
+                end
+        
+                storagesMenu[#storagesMenu+1] = {
+                    header = "Close Menu",
+                    txt = "",
+                    params = {
+                        event = "qb-menu:client:closeMenu"
+                    }
+        
+                }
+                exports['qb-menu']:openMenu(storagesMenu)
+            else
+                QBCore.Functions.Notify("Something Went Wrong", "error")
+            end
+        end
 end)
 
 
