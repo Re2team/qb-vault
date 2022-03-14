@@ -10,7 +10,7 @@ Config.StorageCreationAmount=5000
 
 Config.passwordSettingCost=500
 
-Config.SaleAvailableForJob=true
+Config.SaleAvailableForJob=false
 Config.jobName="warehouseman"
 
 Config.location = {

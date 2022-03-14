@@ -39,6 +39,36 @@ Config.location = {
 }
 ```
 
+if You Want to PLayer Who have job Only Create Storage For Players 
+
+in sh_config.lua change 
+```
+Config.SaleAvailableForJob=true
+Config.jobName="warehouseman"   <!-- job you make it in shared file -->
+```
+
+
+And For job you Need to add lines Bellow tou Your Shared file or in shared Folder in jobs file
+
+```
+['warehouseman'] = {
+		label = 'Warehouse Keeper',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            ['0'] = {
+                name = 'Recruit',
+                payment = 50
+            },
+            ['1'] = {
+                name = 'Manager',
+                isboss = true,
+                payment = 100
+            },
+        },
+	},
+```
+
 ## How to Install
 ```
 import vaults.sql

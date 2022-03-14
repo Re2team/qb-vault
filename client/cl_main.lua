@@ -419,7 +419,6 @@ AddEventHandler('re2-vault:addMemberToStorage', function(data)
             if p then return end
             p = promise.new()
             QBCore.Functions.TriggerCallback('re2-vault:server:addMember', function(result)
-                print(json.encode(result))
                 p:resolve(result)
             end, data)
             return Citizen.Await(p)
@@ -462,7 +461,6 @@ AddEventHandler('re2-vault:removeMemberFromStorage', function(data)
             if p then return end
             p = promise.new()
             QBCore.Functions.TriggerCallback('re2-vault:server:removeMember', function(result)
-                print(json.encode(result))
                 p:resolve(result)
             end, data)
             return Citizen.Await(p)
@@ -501,7 +499,6 @@ AddEventHandler('re2-vault:addCapacity', function(data)
             if p then return end
             p = promise.new()
             QBCore.Functions.TriggerCallback('re2-vault:server:addCapacity', function(result)
-                print(json.encode(result))
                 p:resolve(result)
             end, data)
             return Citizen.Await(p)
@@ -547,7 +544,6 @@ AddEventHandler('re2-vault:changePassword', function(data)
             if p then return end
             p = promise.new()
             QBCore.Functions.TriggerCallback('re2-vault:server:changePassword', function(result)
-                print(json.encode(result))
                 p:resolve(result)
             end, data)
             return Citizen.Await(p)
@@ -595,8 +591,7 @@ AddEventHandler('re2-vault:getcitizenId', function(location)
         end
         
         local result = fetchStoragePromise(data)
-        p = nil
-            print(json.encode(result))
+            p = nil
             if result then
                 local storagesMenu = {
                     {
